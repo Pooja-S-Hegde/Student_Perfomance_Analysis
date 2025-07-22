@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Performance Prediction Results</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h1 class="text-center mb-4 text-primary">📊 Performance Prediction Results</h1>
+            
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">❌ Error!</h4>
+                <p class="mb-0">{{ error }}</p>
+            </div>
+            {% else %}
+            
+            <!-- Input Summary -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">📝 Input Scores</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="text-primary">📊 {{ math_score }}</h4>
+                                <small class="text-muted">Math Score</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="text-success">📚 {{ reading_score }}</h4>
+                                <small class="text-muted">Reading Score</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="text-info">✍️ {{ writing_score }}</h4>
+                                <small class="text-muted">Writing Score</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Prediction Results -->
+            <div class="card shadow-lg mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">🔮 AI Prediction Results</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-center p-4 bg-light rounded">
+                                <h2 class="display-4 text-success">{{ predicted_grade }}</h2>
+                                <h5 class="text-muted">Predicted Grade</h5>
+                                <p class="lead">{{ predicted_avg }}% Average</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center p-4 bg-light rounded">
+                                <h2 class="display-4 text-primary">{{ actual_grade }}</h2>
+                                <h5 class="text-muted">Current Grade</h5>
+                                <p class="lead">{{ actual_avg }}% Average</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-4" role="alert">
+                        <h6 class="alert-heading">💡 AI Insights:</h6>
+                        <p class="mb-0">{{ message }}</p>
+                    </div>
+                    
+                    {% set difference = predicted_avg - actual_avg %}
+                    {% if difference > 2 %}
+                    <div class="alert alert-success" role="alert">
+                        <strong>🚀 Great Potential!</strong> The AI predicts you could perform {{ "%.1f"|format(difference) }} points better than your current average!
+                    </div>
+                    {% elif difference < -2 %}
+                    <div class="alert alert-warning" role="alert">
+                        <strong>⚠️ Watch Out!</strong> The AI suggests focusing on consistency across subjects to maintain performance.
+                    </div>
+                    {% else %}
+                    <div class="alert alert-primary" role="alert">
+                        <strong>🎯 Consistent Performance!</strong> Your scores align well with predicted performance patterns.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Performance Breakdown -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">📈 Performance Analysis</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="p-3">
+                                {% if math_score >= 80 %}
+                                    <span class="badge bg-success fs-6">Math: Strong</span>
+                                {% elif math_score >= 60 %}
+                                    <span class="badge bg-warning fs-6">Math: Average</span>
+                                {% else %}
+                                    <span class="badge bg-danger fs-6">Math: Needs Work</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="p-3">
+                                {% if reading_score >= 80 %}
+                                    <span class="badge bg-success fs-6">Reading: Strong</span>
+                                {% elif reading_score >= 60 %}
+                                    <span class="badge bg-warning fs-6">Reading: Average</span>
+                                {% else %}
+                                    <span class="badge bg-danger fs-6">Reading: Needs Work</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="p-3">
+                                {% if writing_score >= 80 %}
+                                    <span class="badge bg-success fs-6">Writing: Strong</span>
+                                {% elif writing_score >= 60 %}
+                                    <span class="badge bg-warning fs-6">Writing: Average</span>
+                                {% else %}
+                                    <span class="badge bg-danger fs-6">Writing: Needs Work</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% endif %}
+            
+            <div class="text-center">
+                <a href="/" class="btn btn-primary btn-lg">📝 Try Another Prediction</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
